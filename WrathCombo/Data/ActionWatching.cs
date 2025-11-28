@@ -315,6 +315,7 @@ public static class ActionWatching
 
     public static TimeSpan TimeSinceLastAction => DateTime.Now - TimeLastActionUsed;
     public static DateTime TimeLastActionUsed { get; set; } = DateTime.Now;
+    public static DateTime TimeSinceLastReset { get;set; } = DateTime.Now;
 
     public static void OutputLog()
     {
@@ -456,7 +457,7 @@ public static class ActionWatching
 
     private static void ResetActions(ConditionFlag flag, bool value)
     {
-        if (flag == ConditionFlag.InCombat && !value)
+        if (flag == ConditionFlag.InCombat && !value && TimeSinceLastReset.AddMinutes(15) < DateTime.Now)
         {
             CombatActions.Clear();
             WeaveActions.Clear();
