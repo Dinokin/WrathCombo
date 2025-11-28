@@ -457,7 +457,7 @@ public static class ActionWatching
 
     private static void ResetActions(ConditionFlag flag, bool value)
     {
-        if (flag == ConditionFlag.InCombat && !value && TimeSinceLastReset.AddMinutes(15) < DateTime.Now)
+        if (flag == ConditionFlag.InCombat && !value && TimeSinceLastReset.AddMinutes(1) < DateTime.Now)
         {
             CombatActions.Clear();
             WeaveActions.Clear();
