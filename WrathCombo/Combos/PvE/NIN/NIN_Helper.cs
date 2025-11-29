@@ -15,7 +15,7 @@ internal partial class NIN
 {
     static NINGauge gauge = GetJobGauge<NINGauge>();
     public static FrozenSet<uint> MudraSigns = [Ten, Chi, Jin, TenCombo, ChiCombo, JinCombo];
-    public static FrozenSet<uint> NormalJutsus = [FumaShuriken, Raiton, Katon, Doton, Suiton, Hyoton, HyoshoRanryu, GokaMekkyaku];
+    public static FrozenSet<uint> NormalJutsus = [FumaShuriken, Raiton, Katon, Doton, Suiton, Hyoton, HyoshoRanryu, GokaMekkyaku, Rabbit];
     internal static bool STSimpleMode => IsEnabled(Preset.NIN_ST_SimpleMode);
     internal static bool AoESimpleMode => IsEnabled(Preset.NIN_AoE_SimpleMode);
     internal static bool NinjaWeave => CanWeave(.6f, 10);
@@ -250,24 +250,9 @@ internal partial class NIN
                 actionID = Rabbit;
                 return true;
             }
-
-            switch (ActionWatching.LastAction)
-            {
-                case Rabbit:
-                case FumaShuriken:
-                case Katon:
-                case Raiton:
-                case Hyoton:
-                case Huton:
-                case Doton:
-                case Suiton:
-                case GokaMekkyaku:
-                case HyoshoRanryu:
-                    CurrentMudra = MudraState.None;
-                    return false;
-            }
             
-            if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 2 && CurrentNinjutsu is Ninjutsu)
+            if (NormalJutsus.Contains(ActionWatching.LastAction) ||
+                (ActionWatching.TimeSinceLastAction.TotalSeconds >= 2 && CurrentNinjutsu is Ninjutsu))
             {
                 CurrentMudra = MudraState.None;
                 return false;
