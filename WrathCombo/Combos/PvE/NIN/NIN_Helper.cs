@@ -176,7 +176,7 @@ internal partial class NIN
     {
         if (!JustUsed(TenChiJin, 6f))
             return false;
-
+        
         var original = actionID;
         actionID = ActionWatching.LastAction switch
         {
@@ -185,8 +185,7 @@ internal partial class NIN
             TCJRaiton => TCJSuiton,
             _ => actionID,
         };
-
-        Svc.Log.Debug($"{ActionWatching.LastAction is not TCJSuiton && original != actionID}");
+        
         return ActionWatching.LastAction is not TCJSuiton && original != actionID;
     }
     internal static bool AoETenChiJinDoton(ref uint actionID)
@@ -249,7 +248,6 @@ internal partial class NIN
             if (CurrentNinjutsu is Rabbit)
             {
                 actionID = Rabbit;
-
                 return true;
             }
 
@@ -266,14 +264,12 @@ internal partial class NIN
                 case GokaMekkyaku:
                 case HyoshoRanryu:
                     CurrentMudra = MudraState.None;
-                    
                     return false;
             }
             
-            if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 2 && OriginalHook(Ninjutsu) is Ninjutsu)
+            if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 2 && CurrentNinjutsu is Ninjutsu)
             {
                 CurrentMudra = MudraState.None;
-                
                 return false;
             }
 
