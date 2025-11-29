@@ -315,8 +315,8 @@ public static class ActionWatching
 
     public static TimeSpan TimeSinceLastAction => DateTime.Now - TimeLastActionUsed;
     public static DateTime TimeLastActionUsed { get; set; } = DateTime.Now;
-    public static DateTime TimeSinceLastReset { get;set; } = DateTime.Now;
-
+    public static DateTime TimeLastReset { get; set; } = DateTime.Now;
+    
     public static void OutputLog()
     {
         DuoLog.Information($"You just used: {CombatActions.LastOrDefault().ActionName()} x{LastActionUseCount}");
@@ -398,7 +398,7 @@ public static class ActionWatching
                     return ActionManager.Instance()->UseActionLocation
                         (actionType, replacedWith, location: &location);
                 }
-
+                
                 //Important to pass actionId here and not replaced. Performance mode = result from earlier, which could be modified. Non-performance mode = original action, which gets modified by the hook. Same result.
                 var hookResult = AutoRotationController.CurrentActIsAutorot ? UseActionHook.Original(actionManager, actionType, actionId, originalTargetId, extraParam, mode, comboRouteId, outOptAreaTargeted) :
                     UseActionHook.Original(actionManager, actionType, actionId, targetId, extraParam, mode, comboRouteId, outOptAreaTargeted);
@@ -457,7 +457,7 @@ public static class ActionWatching
 
     private static void ResetActions(ConditionFlag flag, bool value)
     {
-        if (flag == ConditionFlag.InCombat && !value && TimeSinceLastReset.AddMinutes(1) < DateTime.Now)
+        if (flag == ConditionFlag.InCombat && !value && TimeLastReset.AddSeconds(10) <= DateTime.Now)
         {
             CombatActions.Clear();
             WeaveActions.Clear();
@@ -467,6 +467,8 @@ public static class ActionWatching
             LastWeaponskill = 0;
             LastSpell = 0;
             UsedOnDict.Clear();
+            
+            TimeLastReset = DateTime.Now;
         }
     }
 
