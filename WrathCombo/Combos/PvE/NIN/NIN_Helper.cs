@@ -246,17 +246,9 @@ internal partial class NIN
 
         public bool ContinueCurrentMudra(ref uint actionID)
         {
-            if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 2 && OriginalHook(Ninjutsu) is Ninjutsu)
+            if (CurrentNinjutsu is Rabbit)
             {
-                InMudra = false;
-                CurrentMudra = MudraState.None;
-                
-                return false;
-            }
-
-            if (OriginalHook(Ninjutsu) is Rabbit)
-            {
-                actionID = OriginalHook(Ninjutsu);
+                actionID = Rabbit;
 
                 return true;
             }
@@ -274,14 +266,19 @@ internal partial class NIN
                 case GokaMekkyaku:
                 case HyoshoRanryu:
                     CurrentMudra = MudraState.None;
-                    InMudra = false;
                     
                     return false;
+            }
+            
+            if (ActionWatching.TimeSinceLastAction.TotalSeconds >= 2 && OriginalHook(Ninjutsu) is Ninjutsu)
+            {
+                CurrentMudra = MudraState.None;
+                
+                return false;
             }
 
             return CurrentMudra switch
             {
-                MudraState.None => false,
                 MudraState.CastingFumaShuriken => CastFumaShuriken(ref actionID),
                 MudraState.CastingKaton => CastKaton(ref actionID),
                 MudraState.CastingRaiton => CastRaiton(ref actionID),
@@ -332,7 +329,7 @@ internal partial class NIN
         #region Raiton
         public bool CastRaiton(ref uint actionID)  // Ten Chi
         {
-            if (Raiton.LevelChecked() && CurrentMudra is MudraState.None or MudraState.CastingRaiton)
+            if (CurrentMudra is MudraState.None or MudraState.CastingRaiton)
             {
                 // Finish the Mudra
                 switch (ActionWatching.LastAction)
@@ -357,7 +354,7 @@ internal partial class NIN
         #region Suiton
         public bool CastSuiton(ref uint actionID)  //Ten Chi Jin
         {
-            if (Suiton.LevelChecked() && CurrentMudra is MudraState.None or MudraState.CastingSuiton)
+            if (CurrentMudra is MudraState.None or MudraState.CastingSuiton)
             {
                 //Finish the Mudra
                 switch (ActionWatching.LastAction)
@@ -385,7 +382,7 @@ internal partial class NIN
         #region Hyosho Ranryu 
         public bool CastHyoshoRanryu(ref uint actionID) // Ten Jin
         {
-            if (HyoshoRanryu.LevelChecked() && CurrentMudra is MudraState.None or MudraState.CastingHyoshoRanryu)
+            if (CurrentMudra is MudraState.None or MudraState.CastingHyoshoRanryu)
             {
                 //Finish the Mudra
                 switch (ActionWatching.LastAction)
@@ -410,7 +407,7 @@ internal partial class NIN
         #region Katon
         public bool CastKaton(ref uint actionID) // Jin Ten
         {
-            if (Katon.LevelChecked() && CurrentMudra is MudraState.None or MudraState.CastingKaton)
+            if (CurrentMudra is MudraState.None or MudraState.CastingKaton)
             {
                 //Finish the Mudra
                 switch (ActionWatching.LastAction)
@@ -435,7 +432,7 @@ internal partial class NIN
         #region Doton
         public bool CastDoton(ref uint actionID) // Jin Ten Chi
         {
-            if (Doton.LevelChecked() && CurrentMudra is MudraState.None or MudraState.CastingDoton)
+            if (CurrentMudra is MudraState.None or MudraState.CastingDoton)
             {
                 //Finish the Mudra
                 switch (ActionWatching.LastAction)
@@ -463,7 +460,7 @@ internal partial class NIN
         #region Huton
         public bool CastHuton(ref uint actionID) // Jin Chi Ten
         {
-            if (Huton.LevelChecked() && CurrentMudra is MudraState.None or MudraState.CastingHuton)
+            if (CurrentMudra is MudraState.None or MudraState.CastingHuton)
             {
                 //Finish the Mudra
                 switch (ActionWatching.LastAction)
@@ -491,7 +488,7 @@ internal partial class NIN
         #region Goka Mekkyaku
         public bool CastGokaMekkyaku(ref uint actionID) // Jin Ten
         {
-            if (GokaMekkyaku.LevelChecked() && CurrentMudra is MudraState.None or MudraState.CastingGokaMekkyaku)
+            if (CurrentMudra is MudraState.None or MudraState.CastingGokaMekkyaku)
             {
                 //Finish the Mudra
                 switch (ActionWatching.LastAction)
